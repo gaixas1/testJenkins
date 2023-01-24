@@ -32,12 +32,14 @@ pipeline {
         }
         stage("Check Keys ") {
             steps {
-                CERT = sh (script: "openssl x509 -noout -modulus -in ~/cert_new_${currentBuild.number}/agent.crt |openssl md5",returnStdout: true).trim()
-                KEY  = sh (script: "openssl rsa  -noout -modulus -in ~/cert_new_${currentBuild.number}/agent.key |openssl md5",returnStdout: true).trim()
-                if ( CERT == KEY ) {
-                    echo "Key matches cert"
-                } else {
-                    sh "exit 1"
+                script {
+                    CERT = sh (script: "openssl x509 -noout -modulus -in ~/cert_new_${currentBuild.number}/agent.crt |openssl md5",returnStdout: true).trim()
+                    KEY  = sh (script: "openssl rsa  -noout -modulus -in ~/cert_new_${currentBuild.number}/agent.key |openssl md5",returnStdout: true).trim()
+                    if ( CERT == KEY ) {
+                        echo "Key matches cert"
+                    } else {
+                        sh "exit 1"
+                    }
                 }
             }
         }
