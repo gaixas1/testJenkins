@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh "mkdir ~/cert_new_${currentBuild.number}/"
                 sh "openssl genrsa -out ~/cert_new_${currentBuild.number}/${DST}.key 2048"
-                sh "openssl req -new -key ~/cert_new_${currentBuild.number}/${DST}.key -out ~/cert_new_${currentBuild.number}/${DST}/${DST}.csr -subj '/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=example.com'"
+                sh "openssl req -new -key ~/cert_new_${currentBuild.number}/${DST}.key -out ~/cert_new_${currentBuild.number}/${DST}.csr -subj '/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=example.com'"
                 sh "cat ~/cert_new_${currentBuild.number}/${DST}.csr"
                 sh "scp -o 'StrictHostKeyChecking no' ~/cert_new_${currentBuild.number}/${DST}.csr gaixas1@hvisor:/home/gaixas1/csr/"
                 sh "ssh -o 'StrictHostKeyChecking no' gaixas1@hvisor '~/gen_cert.sh ${DST}'"
