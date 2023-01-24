@@ -7,7 +7,7 @@ pipeline {
         stage("Connectivity check") {
             sh "ssh ${DST} 'echo `hostname` `id`'"
         }
-        stage("Collect "+DST) {
+        stage("Collect ") {
             sh "mkdir ~/cert_backup_${currentBuild.number}/"
             sh "scp ${DST}:~/test_cert/agent.crt ~/cert_backup_${currentBuild.number}/ || true"
             sh "scp ${DST}:~/test_cert/agent.key ~/cert_backup_${currentBuild.number}/ || true"
