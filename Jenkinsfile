@@ -1,5 +1,3 @@
-def DST = "user1@localhost"
-
 pipeline {
     agent any
     choice(name: 'DST', choices: ['user1@localhost', 'user2@localhost'], description: 'Pick destination')
