@@ -1,7 +1,9 @@
 pipeline {
     agent any
-    choice(name: 'DST', choices: ['user1@localhost', 'user2@localhost'], description: 'Pick destination')
-
+    parameters {
+        choice(name: 'DST', choices: ['user1@localhost', 'user2@localhost'], description: 'Pick destination')
+    }
+    
     stages {
 
         stage("Preparation ") {
