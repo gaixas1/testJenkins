@@ -2,8 +2,17 @@ def DST = "user1@localhost"
 
 pipeline {
     agent any
-    
+    choice(name: 'DST', choices: ['user1@localhost', 'user2@localhost'], description: 'Pick destination')
+
     stages {
+
+        stage("Preparation ") {
+            steps {
+                sh "mkdir ~/cert_backup_${currentBuild.number}/"
+                sh "mkdir ~/cert_new_${currentBuild.number}/"
+            }
+        }
+
         stage("Connectivity check") {
             steps {
                 sh "ssh ${DST} 'echo `hostname` `id`'"
@@ -11,14 +20,12 @@ pipeline {
         }
         stage("Collect ") {
             steps {
-                sh "mkdir ~/cert_backup_${currentBuild.number}/"
                 sh "scp ${DST}:~/test_cert/agent.crt ~/cert_backup_${currentBuild.number}/ || true"
                 sh "scp ${DST}:~/test_cert/agent.key ~/cert_backup_${currentBuild.number}/ || true"
             }
         }
         stage("Generate Cert  ") {
             steps {
-                sh "mkdir ~/cert_new_${currentBuild.number}/"
                 sh "openssl genrsa -out ~/cert_new_${currentBuild.number}/${DST}.key 2048"
                 sh "openssl req -new -key ~/cert_new_${currentBuild.number}/${DST}.key -out ~/cert_new_${currentBuild.number}/${DST}.csr -subj '/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=example.com'"
                 sh "cat ~/cert_new_${currentBuild.number}/${DST}.csr"
